@@ -20,5 +20,11 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('package') {
+                    steps {
+                        echo 'package app...'
+                        sh 'mvn package -Pnative -Dquarkus.native.container-build=true'
+                    }
+                }
     }
 }
