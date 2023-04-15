@@ -1,7 +1,6 @@
 package org.acme.quickstart;
 
 import org.acme.quickstart.model.Developer;
-import org.jboss.resteasy.spi.ApplicationException;
 
 import javax.validation.constraints.NotBlank;
 import javax.ws.rs.*;
@@ -11,7 +10,7 @@ import javax.ws.rs.core.*;
 @Path("/hello")
 public class GreetingResource {
 
-    public static enum Order {
+    public enum Order {
         desc,asc
     }
 
