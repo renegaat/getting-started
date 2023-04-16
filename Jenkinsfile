@@ -20,5 +20,14 @@ pipeline {
                 sh 'mvn test'
             }
         }
+         stage('Build and push Docker Image') {
+                    steps {
+                        echo 'Building the Docker image...'
+                        script {
+                            sh "docker build -f src/main/docker/Dockerfile.jvm -t getting-started-jvm:latest ."
+                            sh "docker push renegaat/getting-started-jvm:latest"
+                        }
+                    }
+            }
     }
 }
