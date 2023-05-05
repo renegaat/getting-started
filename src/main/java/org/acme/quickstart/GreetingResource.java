@@ -20,7 +20,7 @@ public class GreetingResource {
     public String hello(@Context UriInfo uriInfo,
                         @QueryParam("order") Order order,
                         @NotBlank @HeaderParam("authorization") String auth) {
-
+    
         return String.format("hello.return %s %s %s", uriInfo.getPath(), order, auth);
     }
 
@@ -51,5 +51,4 @@ public class GreetingResource {
     public void delete() {
         System.out.println("delete");
     }
-
 }
