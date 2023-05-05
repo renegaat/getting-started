@@ -14,6 +14,13 @@ pipeline {
                 sh 'mvn clean package -DskipTests'
             }
         }
+        stage('Build Native Image') {
+                    steps {
+                        script {
+                            sh "mvn package -Pnative -Dquarkus.native.container-build=true"
+                        }
+                    }
+        }
         stage('Test') {
             steps {
                 echo 'Running unit tests...'
