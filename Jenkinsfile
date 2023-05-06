@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+            GRAALVM_HOME = "/usr/lib/jvm/graalvm-ce-java11-22.3.2"
+        }
+
     stages {
         stage('Checkout') {
             steps {
