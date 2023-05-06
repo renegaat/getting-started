@@ -17,7 +17,7 @@ pipeline {
         stage('Build Native Image') {
                     steps {
                         script {
-                            sh "mvn clean package -Pnative -Dquarkus.native.container-build=true"
+                            sh "mvn clean package -Pnative"
                         }
                     }
         }
