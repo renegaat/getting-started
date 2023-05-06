@@ -4,7 +4,6 @@ pipeline {
     environment {
             GRAALVM_HOME = "/usr/lib/jvm/graalvm-ce-java11-22.1.0"
         }
-
     stages {
         stage('Checkout') {
             steps {
@@ -18,8 +17,9 @@ pipeline {
                 sh 'mvn clean package -DskipTests'
             }
         }
-        stage('Build Native Image') {
+        stage('Build Quarkus Native Image') {
                     steps {
+                        echo 'Building Quarkus Native image...'
                         script {
                             sh "mvn clean package -Pnative"
                         }
