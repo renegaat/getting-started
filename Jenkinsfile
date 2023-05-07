@@ -4,6 +4,7 @@ pipeline {
     environment {
             GRAALVM_HOME = "/usr/lib/jvm/graalvm-ce-java11-22.1.0"
         }
+
     stages {
         stage('Checkout') {
             steps {
@@ -11,12 +12,14 @@ pipeline {
                 git 'https://github.com/renegaat/getting-started.git'
             }
         }
+
         stage('Build') {
             steps {
                 echo 'Building the Quarkus application...'
                 sh 'mvn clean package -DskipTests'
             }
         }
+
         stage('Build Quarkus Native Image') {
                     steps {
                         echo 'Building Quarkus Native image...'
@@ -25,11 +28,33 @@ pipeline {
                         }
                     }
         }
-        stage('Test') {
-            steps {
-                echo 'Running unit tests...'
-                sh 'mvn test'
+
+       stage('Test') {
+                steps {
+                    echo 'Running unit tests...'
+                    sh 'mvn test'
+                }
             }
-        }
+
+        stage('Deploy') {
+                    environment {
+                        DOCKER_REGISTRY = 'renegaat'
+                        IMAGE_NAME = 'getting-started'
+                        IMAGE_TAG = 'latest'
+                    }
+
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
+                        }
+
+                        sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
+                        sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
+
+                        // Deploy the app to Kubernetes
+                        sh 'kubectl apply -f kubernetes.yaml'
+                    }
+                }
+
     }
 }
