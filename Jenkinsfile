@@ -45,14 +45,11 @@ pipeline {
 
                     steps {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
+                            sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                         }
 
                         sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
                         sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
-
-                        // Deploy the app to Kubernetes
-                        sh 'kubectl apply -f kubernetes.yaml'
                     }
                 }
 
