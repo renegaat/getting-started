@@ -48,7 +48,7 @@ pipeline {
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                         }
 
-                        sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
+                        sh 'docker build -f src/main/docker/Dockerfile.jvm -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
                         sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
                     }
                 }
