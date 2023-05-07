@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Build Quarkus Native Image') {
+        stage('Test Quarkus Native Image Build') {
                     steps {
                         echo 'Building Quarkus Native image...'
                         script {
@@ -47,11 +47,10 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                         }
-
+                        sh 'mvn clean package -DskipTests'
                         sh 'docker build -f src/main/docker/Dockerfile.jvm -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
                         sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
                     }
                 }
-
     }
 }
